@@ -8,8 +8,10 @@ const clearChatButton = document.getElementById("deleteButton");
 // State variables
 let currentUserMessage = null;
 let isGeneratingResponse = false;
+let conversationHistory = [];
+const MAX_HISTORY_LENGTH = 5; // Batasi jumlah pesan yang disimpan
 
-const GOOGLE_API_KEY = "AIzaSyAcRg_hxMztoJyZ12fxctxWuSWdcO7Y0g0";
+const GOOGLE_API_KEY = "AIzaSyAcRg_hxMztoJyZ12fxctxWuSWdcO7Y0g0"; // Masukkan API KEY Anda di sini
 const API_REQUEST_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${GOOGLE_API_KEY}`;
 
 // Load saved data from local storage
@@ -21,17 +23,16 @@ const loadSavedChatHistory = () => {
     themeToggleButton.innerHTML = isLightTheme ? '<i class="bx bx-moon"></i>' : '<i class="bx bx-sun"></i>';
 
     chatHistoryContainer.innerHTML = '';
+    conversationHistory = []; // Reset conversation history
 
     // Iterate through saved chat history and display messages
     savedConversations.forEach(conversation => {
         // Display the user's message
         const userMessageHtml = `
-
             <div class="message__content">
                 <img class="message__avatar" src="https://w7.pngwing.com/pngs/81/570/png-transparent-profile-logo-computer-icons-user-user-blue-heroes-logo-thumbnail.png" alt="User avatar">
-               <p class="message__text">${conversation.userMessage}</p>
+                <p class="message__text">${conversation.userMessage}</p>
             </div>
-        
         `;
 
         const outgoingMessageElement = createChatMessageElement(userMessageHtml, "message--outgoing");
@@ -43,8 +44,7 @@ const loadSavedChatHistory = () => {
         const rawApiResponse = responseText; // Plain text version
 
         const responseHtml = `
-        
-           <div class="message__content">
+            <div class="message__content">
                 <img class="message__avatar" src="assets/gemini.svg" alt="Gemini avatar">
                 <p class="message__text"></p>
                 <div class="message__loading-indicator hide">
@@ -54,7 +54,6 @@ const loadSavedChatHistory = () => {
                 </div>
             </div>
             <span onClick="copyMessageToClipboard(this)" class="message__icon hide"><i class='bx bx-copy-alt'></i></span>
-        
         `;
 
         const incomingMessageElement = createChatMessageElement(responseHtml, "message--incoming");
@@ -64,6 +63,12 @@ const loadSavedChatHistory = () => {
 
         // Display saved chat without typing effect
         showTypingEffect(rawApiResponse, parsedApiResponse, messageTextElement, incomingMessageElement, true); // 'true' skips typing
+
+        // Tambahkan ke riwayat percakapan
+        conversationHistory.push({
+            userMessage: conversation.userMessage,
+            apiResponse: responseText
+        });
     });
 
     document.body.classList.toggle("hide-header", savedConversations.length > 0);
@@ -113,11 +118,20 @@ const requestApiResponse = async (incomingMessageElement) => {
     const messageTextElement = incomingMessageElement.querySelector(".message__text");
 
     try {
+        // Persiapkan riwayat percakapan untuk dikirim
+        const conversationContext = conversationHistory.map(item => [
+            { role: "user", parts: [{ text: item.userMessage }] },
+            { role: "model", parts: [{ text: item.apiResponse }] }
+        ]).flat();
+
         const response = await fetch(API_REQUEST_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                contents: [{ role: "user", parts: [{ text: currentUserMessage }] }]
+                contents: [
+                    ...conversationContext,
+                    { role: "user", parts: [{ text: currentUserMessage }] }
+                ]
             }),
         });
 
@@ -130,6 +144,15 @@ const requestApiResponse = async (incomingMessageElement) => {
         const parsedApiResponse = marked.parse(responseText);
         const rawApiResponse = responseText;
 
+        // Simpan percakapan dalam riwayat
+        if (conversationHistory.length >= MAX_HISTORY_LENGTH) {
+            conversationHistory.shift(); // Hapus pesan tertua jika melebihi batas
+        }
+        conversationHistory.push({
+            userMessage: currentUserMessage,
+            apiResponse: responseText
+        });
+
         showTypingEffect(rawApiResponse, parsedApiResponse, messageTextElement, incomingMessageElement);
 
         // Save conversation in local storage
@@ -139,6 +162,7 @@ const requestApiResponse = async (incomingMessageElement) => {
             apiResponse: responseData
         });
         localStorage.setItem("saved-api-chats", JSON.stringify(savedConversations));
+
     } catch (error) {
         isGeneratingResponse = false;
         messageTextElement.innerText = error.message;
@@ -180,7 +204,6 @@ const addCopyButtonToCodeBlocks = () => {
 // Show loading animation during API request
 const displayLoadingAnimation = () => {
     const loadingHtml = `
-
         <div class="message__content">
             <img class="message__avatar" src="./assets/gemini.svg" alt="Gemini avatar">
             <p class="message__text"></p>
@@ -191,7 +214,6 @@ const displayLoadingAnimation = () => {
             </div>
         </div>
         <span onClick="copyMessageToClipboard(this)" class="message__icon hide"><i class='bx bx-copy-alt'></i></span>
-    
     `;
 
     const loadingMessageElement = createChatMessageElement(loadingHtml, "message--incoming", "message--loading");
@@ -217,7 +239,6 @@ const handleOutgoingMessage = () => {
     isGeneratingResponse = true;
 
     const outgoingMessageHtml = `
-    
         <div class="message__content">
             <img class="message__avatar" src="https://w7.pngwing.com/pngs/81/570/png-transparent-profile-logo-computer-icons-user-user-blue-heroes-logo-thumbnail.png" alt="User avatar">
             <p class="message__text"></p>
@@ -247,6 +268,7 @@ themeToggleButton.addEventListener('click', () => {
 clearChatButton.addEventListener('click', () => {
     if (confirm("Apakah Anda yakin ingin menghapus semua riwayat obrolan?")) {
         localStorage.removeItem("saved-api-chats");
+        conversationHistory = []; // Reset riwayat percakapan
 
         // Reload chat history to reflect changes
         loadSavedChatHistory();
