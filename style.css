@@ -107,7 +107,7 @@ body.hide-header .header{
 }
 
 .header__title h2{
-    color: var(--heading-secondary-color);
+    color: #666;
     font-size: 3.25rem;
     font-weight: 600;
 }
