@@ -139,7 +139,7 @@ const requestApiResponse = async (incomingMessageElement) => {
         if (!response.ok) throw new Error(responseData.error.message);
 
         const responseText = responseData?.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (!responseText) throw new Error("Invalid API response.");
+        if (!responseText) throw new Error("Hmm... sepertinya ada sesuatu yang salah.");
 
         const parsedApiResponse = marked.parse(responseText);
         const rawApiResponse = responseText;
