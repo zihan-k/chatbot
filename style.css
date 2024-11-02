@@ -25,7 +25,7 @@
 }
 
 .light_mode{
-    --primary-color: #FFFFFF;
+    --primary-color: #ffffff;
     --secondary-color: #F0F4F9;
     --secondary-hover-color: #DDE3EA;
   
@@ -66,11 +66,21 @@ body.hide-header .header{
 
 .navbar__logo{
     font-weight: 600;
-    background: linear-gradient(to right, #4a90e2, #a355b9, #ff6b6b);
+    background: linear-gradient(to right, #4CAF50, #66BFBF, #036666);
     background-clip: text;
     -webkit-background-clip: text;
     text-fill-color: transparent;
     -webkit-text-fill-color: transparent;
+    align-items: center;
+    line-height: 1;
+}
+
+.navbar__logo img {
+    width: 25px;
+    height: 25px;
+    margin-right: 5px;
+    vertical-align: middle;
+    display: inline-block;
 }
 
 .navbar__button{
@@ -97,17 +107,21 @@ body.hide-header .header{
 
 .header__title h1{
     width: fit-content;
-    background: linear-gradient(to right, #4a90e2, #a355b9, #ff6b6b);
+    background: linear-gradient(to right, #4CAF50, #66BFBF, #036666);
     background-clip: text;
     -webkit-background-clip: text;
     text-fill-color: transparent;
     -webkit-text-fill-color: transparent;
-    font-size: 3.25rem;
     font-weight: 600;
 }
 
 .header__title h2{
-    color: #666;
+    width: fit-content;
+    background: linear-gradient(to right, #4CAF50, #66BFBF, #036666);
+    background-clip: text;
+    -webkit-background-clip: text;
+    text-fill-color: transparent;
+    -webkit-text-fill-color: transparent;
     font-size: 3.25rem;
     font-weight: 600;
 }
@@ -334,7 +348,7 @@ body.hide-header .header{
     width: 100%;
     border-radius: 0.135rem;
     background-position: -800px 0;
-    background: linear-gradient(to right, #2563eb60 30%, var(--primary-color) 60%, #2563eb60);
+    background: linear-gradient(to right, #007338 30%, var(--primary-color) 60%, #007338);
     animation: loading 3s linear infinite;
 }
 
@@ -454,11 +468,11 @@ blockquote{
     }
 
     .header__title h1{
-        font-size: 2.7rem;
+        font-size: 2.5rem;
     }
 
     .header__title h2{
-        font-size: 2.5rem;
+        font-size: 1.75rem;
     }
 
     .suggests{
@@ -478,4 +492,4 @@ blockquote{
         font-size: 0.8rem;
     }
 
-}
+        }
