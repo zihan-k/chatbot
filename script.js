@@ -11,7 +11,7 @@ let isGeneratingResponse = false;
 let conversationHistory = [];
 const MAX_HISTORY_LENGTH = 5; // Batasi jumlah pesan yang disimpan
 
-const GOOGLE_API_KEY = "AIzaSyAcRg_hxMztoJyZ12fxctxWuSWdcO7Y0g0"; // Masukkan API KEY Anda di sini
+const GOOGLE_API_KEY = "AIzaSyC9Amx7lMR9nhR7WmZzYYm238gT8sI0UzY"; // Masukkan API KEY Anda di sini
 const API_REQUEST_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${GOOGLE_API_KEY}`;
 
 // Load saved data from local storage
@@ -45,7 +45,7 @@ const loadSavedChatHistory = () => {
 
         const responseHtml = `
             <div class="message__content">
-                <img class="message__avatar" src="assets/gemini.svg" alt="Gemini avatar">
+                <img class="message__avatar" src="assets/chatbot.png" alt="ChatBot avatar">
                 <p class="message__text"></p>
                 <div class="message__loading-indicator hide">
                     <div class="message__loading-bar"></div>
@@ -139,7 +139,7 @@ const requestApiResponse = async (incomingMessageElement) => {
         if (!response.ok) throw new Error(responseData.error.message);
 
         const responseText = responseData?.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (!responseText) throw new Error("Hmm... sepertinya ada sesuatu yang salah.");
+        if (!responseText) throw new Error("Invalid API response.");
 
         const parsedApiResponse = marked.parse(responseText);
         const rawApiResponse = responseText;
@@ -205,7 +205,7 @@ const addCopyButtonToCodeBlocks = () => {
 const displayLoadingAnimation = () => {
     const loadingHtml = `
         <div class="message__content">
-            <img class="message__avatar" src="./assets/gemini.svg" alt="Gemini avatar">
+            <img class="message__avatar" src="./assets/chatbot.png" alt="ChatBot avatar">
             <p class="message__text"></p>
             <div class="message__loading-indicator">
                 <div class="message__loading-bar"></div>
