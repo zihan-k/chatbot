@@ -45,7 +45,7 @@ const loadSavedChatHistory = () => {
 
         const responseHtml = `
             <div class="message__content">
-                <img class="message__avatar" src="assets/chatbot.png" alt="ChatBot avatar">
+                <img class="message__avatar" src="./assets/chatbot.png" alt="ChatBot avatar">
                 <p class="message__text"></p>
                 <div class="message__loading-indicator hide">
                     <div class="message__loading-bar"></div>
