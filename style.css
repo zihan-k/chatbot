@@ -348,7 +348,7 @@ body.hide-header .header{
     width: 100%;
     border-radius: 0.135rem;
     background-position: -800px 0;
-    background: linear-gradient(to right, #007338 30%, var(--primary-color) 60%, #007338);
+    background: linear-gradient(to right, #00a550 30%, var(--primary-color) 60%, #00a550);
     animation: loading 3s linear infinite;
 }
 
