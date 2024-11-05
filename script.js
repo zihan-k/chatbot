@@ -292,5 +292,29 @@ messageForm.addEventListener('submit', (e) => {
     handleOutgoingMessage();
 });
 
+function updateGreeting() {
+        const greetingElement = document.getElementById("greeting");
+        const now = new Date();
+        const hour = now.getHours();
+
+        let greeting;
+
+        if (hour >= 5 && hour < 12) {
+            greeting = "Selamat Pagi!";
+        } else if (hour >= 12 && hour < 15) {
+            greeting = "Selamat Siang!";
+        } else if (hour >= 15 && hour < 18) {
+            greeting = "Selamat Sore!";
+        } else {
+            greeting = "Selamat Malam!";
+        }
+
+        greetingElement.textContent = greeting;
+    }
+
+    // Panggil fungsi saat halaman dimuat
+    updateGreeting();
+    // Opsional: Update greeting setiap menit
+    setInterval(updateGreeting, 60000);
 // Load saved chat history on page load
 loadSavedChatHistory();
