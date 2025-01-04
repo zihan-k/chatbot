@@ -9,7 +9,7 @@ const clearChatButton = document.getElementById("deleteButton");
 let currentUserMessage = null;
 let isGeneratingResponse = false;
 let conversationHistory = [];
-const MAX_HISTORY_LENGTH = 5; // Batasi jumlah pesan yang disimpan
+const MAX_HISTORY_LENGTH = 5;
 
 const GOOGLE_API_KEY = "Enter your API KEY"; 
 const API_REQUEST_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${GOOGLE_API_KEY}`;
