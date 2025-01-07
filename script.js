@@ -11,7 +11,7 @@ let isGeneratingResponse = false;
 let conversationHistory = [];
 const MAX_HISTORY_LENGTH = 5;
 
-const GOOGLE_API_KEY = "Enter your API KEY"; 
+const GOOGLE_API_KEY = "AIzaSyC9Amx7lMR9nhR7WmZzYYm238gT8sI0UzY"; // Enter your API KEY
 const API_REQUEST_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${GOOGLE_API_KEY}`;
 
 // Load saved data from local storage
